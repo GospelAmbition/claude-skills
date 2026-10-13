@@ -1,0 +1,16 @@
+{
+  "description": "Warn when an edit puts an empty-string option into a Nuxt UI USelect / USelectMenu",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|MultiEdit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/uselect-empty-value.mjs\""
+          }
+        ]
+      }
+    ]
+  }
+}

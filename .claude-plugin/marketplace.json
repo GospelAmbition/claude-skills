@@ -1,0 +1,26 @@
+{
+  "name": "gospel-ambition",
+  "owner": {
+    "name": "Gospel Ambition"
+  },
+  "metadata": {
+    "description": "Claude Code skills shared across the Gospel Ambition team."
+  },
+  "plugins": [
+    {
+      "name": "nuxtinator",
+      "source": "./plugins/nuxtinator",
+      "description": "Build on Nuxtinator: release and sync layers, embed the feedback widget, Nuxt UI v4 component reference, the code-owned-defaults convention, and a hook that catches empty-string USelect options."
+    },
+    {
+      "name": "disciple-tools",
+      "source": "./plugins/disciple-tools",
+      "description": "Cut Disciple.Tools theme and plugin releases: version bump, tag, push, version-control JSON and release notes."
+    },
+    {
+      "name": "tools",
+      "source": "./plugins/tools",
+      "description": "General tools for any project: demo videos and how-to pages, discovery mode, and more over time."
+    }
+  ]
+}

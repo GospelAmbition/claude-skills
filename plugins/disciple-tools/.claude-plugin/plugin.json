@@ -1,0 +1,7 @@
+{
+  "name": "disciple-tools",
+  "description": "Cut Disciple.Tools theme and plugin releases: version bump, tag, push, version-control JSON and release notes.",
+  "author": {
+    "name": "Gospel Ambition"
+  }
+}

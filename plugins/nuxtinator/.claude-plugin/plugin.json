@@ -1,0 +1,7 @@
+{
+  "name": "nuxtinator",
+  "description": "Build on Nuxtinator: release and sync layers, embed the feedback widget, Nuxt UI v4 component reference, the code-owned-defaults convention, and a hook that catches empty-string USelect options.",
+  "author": {
+    "name": "Gospel Ambition"
+  }
+}

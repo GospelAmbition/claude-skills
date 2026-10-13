@@ -1,0 +1,142 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=block" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0f0d; --surface: #111a17; --surface2: #17221e; --line: #22302b;
+  --text: #eef4f1; --muted: #8b9c95; --dim: #56665f;
+  --accent: #3ee08f; --accent-rgb: 62, 224, 143;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); }
+body { font-family: Inter, sans-serif; color: var(--text); -webkit-font-smoothing: antialiased; }
+#stage { position: absolute; inset: 0; overflow: hidden; }
+.layer { position: absolute; inset: 0; opacity: 0; }
+
+#bg { position: absolute; inset: 0; }
+#glow1, #glow2 { position: absolute; width: 1400px; height: 1400px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--accent-rgb), .13) 0%, rgba(var(--accent-rgb), 0) 62%); }
+#glow2 { width: 1100px; height: 1100px; background: radial-gradient(circle, rgba(var(--accent-rgb), .07) 0%, rgba(var(--accent-rgb), 0) 60%); }
+#grid { position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,.055) 1px, transparent 1.2px);
+  background-size: 32px 32px;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 45%, #000 20%, transparent 75%); }
+#vignette { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(0,0,0,.55) 100%); }
+
+.kicker { font: 600 18px/1 Inter, sans-serif; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); }
+.head { font: 700 60px/1.04 'Inter Tight', sans-serif; letter-spacing: -.025em; }
+.w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .08em; margin-bottom: -.08em; }
+.w > span { display: inline-block; will-change: transform; }
+
+/* screen scenes: text column left, browser window right */
+#textcol { position: absolute; left: 96px; top: 0; width: 440px; height: 1080px; }
+#kick { position: absolute; left: 0; top: 330px; }
+#headline { position: absolute; left: 0; top: 372px; width: 440px; }
+#subs { position: absolute; left: 0; width: 430px; }
+.sub { position: relative; font: 500 24px/1.3 Inter, sans-serif; color: var(--muted); padding-left: 26px; margin-bottom: 16px; }
+.sub::before { content: ''; position: absolute; left: 0; top: 14px; width: 12px; height: 3px; border-radius: 2px; background: var(--accent); }
+#chapters { position: absolute; left: 96px; bottom: 72px; display: flex; gap: 10px; }
+.chap { width: 128px; }
+.chap .bar { height: 4px; border-radius: 2px; background: var(--line); overflow: hidden; }
+.chap .bar i { display: block; height: 100%; width: 0; background: var(--accent); }
+.chap .lbl { margin-top: 12px; font: 600 13px/1 Inter, sans-serif; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); white-space: nowrap; }
+.chap.on .lbl { color: var(--text); }
+
+#win { position: absolute; left: 580px; top: 129px; width: 1244px; height: 822px; border-radius: 16px;
+  background: #0d1311; box-shadow: 0 40px 90px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.07); overflow: hidden; }
+#bar { position: absolute; left: 0; top: 0; right: 0; height: 44px; background: #151e1b; border-bottom: 1px solid #1e2925; }
+#bar .dot { position: absolute; top: 16px; width: 12px; height: 12px; border-radius: 50%; background: #2b3833; }
+#url { position: absolute; left: 50%; top: 9px; transform: translateX(-50%); min-width: 520px; height: 26px; border-radius: 8px;
+  background: #0c1210; color: #93a59e; font: 400 13.5px/26px 'JetBrains Mono', monospace; text-align: center; padding: 0 18px; white-space: nowrap; }
+#url b { color: var(--accent); font-weight: 400; }
+#vp { position: absolute; left: 0; top: 44px; width: 1244px; height: 778px; overflow: hidden; background: #fff; }
+#vp img { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+#spot { position: absolute; border-radius: 12px; border: 3px solid var(--accent);
+  box-shadow: 0 0 0 9999px rgba(6, 12, 10, .38), 0 0 26px rgba(var(--accent-rgb), .55); }
+#tag { position: absolute; font: 700 15px/1 Inter, sans-serif; color: #04140c; background: var(--accent); padding: 7px 10px; border-radius: 6px; letter-spacing: .02em; white-space: nowrap; }
+#cursor { position: absolute; left: 0; top: 0; width: 30px; height: 30px; transform-origin: 3px 2px; filter: drop-shadow(0 3px 6px rgba(0,0,0,.45)); }
+#ripple { position: absolute; border-radius: 50%; border: 3px solid var(--accent); }
+
+/* title */
+#t-kick { position: absolute; left: 160px; top: 300px; }
+#t-head { position: absolute; left: 152px; top: 348px; font: 800 132px/.98 'Inter Tight', sans-serif; letter-spacing: -.04em; width: 1600px; }
+#t-line { position: absolute; left: 160px; top: 650px; height: 6px; border-radius: 3px; background: var(--accent); }
+#t-chips { position: absolute; left: 160px; top: 712px; display: flex; gap: 18px; }
+.chip { display: flex; align-items: center; gap: 14px; padding: 16px 24px 16px 18px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); font: 600 26px/1 'Inter Tight', sans-serif; }
+.chip .n { font: 600 16px/1 'JetBrains Mono', monospace; color: var(--accent); }
+
+/* chapter */
+#c-num { position: absolute; left: 150px; top: 250px; font: 800 330px/1 'Inter Tight', sans-serif; letter-spacing: -.05em; color: transparent; -webkit-text-stroke: 3px var(--accent); }
+#c-kick { position: absolute; left: 164px; top: 640px; }
+#c-title { position: absolute; left: 158px; top: 682px; font: 700 96px/1 'Inter Tight', sans-serif; letter-spacing: -.035em; white-space: nowrap; }
+#c-line { position: absolute; left: 164px; top: 820px; height: 4px; border-radius: 2px; background: var(--accent); }
+
+/* utilities for custom (diagram) scenes */
+.card { position: absolute; border-radius: 22px; background: var(--surface); border: 1px solid var(--line); }
+.pill { display: inline-block; padding: 10px 18px; border-radius: 999px; background: var(--surface2); border: 1px solid var(--line); font: 500 21px/1 Inter, sans-serif; color: var(--text); margin: 0 10px 12px 0; }
+.lab { font: 600 15px/1 Inter, sans-serif; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+.big { font: 700 50px/1 'Inter Tight', sans-serif; letter-spacing: -.03em; }
+.acc { color: var(--accent); }
+.mono { font-family: 'JetBrains Mono', monospace; }
+.row { position: absolute; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); display: flex; align-items: center; padding: 0 22px; }
+.opt { padding: 9px 14px; border-radius: 10px; font: 500 19px/1 Inter, sans-serif; color: var(--muted); margin-right: 8px; }
+.line { position: absolute; height: 3px; background: var(--line); transform-origin: 0 50%; }
+
+/* outro */
+#o-head { position: absolute; left: 0; right: 0; top: 300px; text-align: center; font: 800 112px/1 'Inter Tight', sans-serif; letter-spacing: -.04em; }
+#o-cols { position: absolute; left: 0; right: 0; top: 500px; display: flex; gap: 30px; justify-content: center; }
+.ocol { width: 480px; min-height: 210px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); padding: 32px 34px; }
+.ocol .n { font: 600 16px/1 'JetBrains Mono', monospace; color: var(--accent); }
+.ocol .t { margin-top: 16px; font: 700 38px/1 'Inter Tight', sans-serif; letter-spacing: -.02em; }
+.ocol .d { margin-top: 16px; font: 500 21px/1.4 Inter, sans-serif; color: var(--muted); }
+#fade { position: absolute; inset: 0; background: #000; opacity: 0; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="bg"><div id="glow1"></div><div id="glow2"></div><div id="grid"></div><div id="vignette"></div></div>
+
+  <div class="layer" id="L-title">
+    <div id="t-kick" class="kicker"></div>
+    <div id="t-head"></div>
+    <div id="t-line"></div>
+    <div id="t-chips"></div>
+  </div>
+
+  <div class="layer" id="L-custom"></div>
+
+  <div class="layer" id="L-chapter">
+    <div id="c-num"></div>
+    <div id="c-kick" class="kicker">Chapter</div>
+    <div id="c-title"></div>
+    <div id="c-line"></div>
+  </div>
+
+  <div class="layer" id="L-screen">
+    <div id="textcol"><div id="kick" class="kicker"></div><div id="headline" class="head"></div><div id="subs"></div></div>
+    <div id="chapters"></div>
+    <div id="win">
+      <div id="bar"><div class="dot" style="left:18px"></div><div class="dot" style="left:38px"></div><div class="dot" style="left:58px"></div><div id="url"></div></div>
+      <div id="vp">
+        <img id="im0"><img id="im1"><img id="im2"><img id="im3">
+        <div id="spot"></div><div id="tag"></div>
+        <div id="ripple"></div>
+        <svg id="cursor" viewBox="0 0 30 30"><path d="M3 2 L3 24 L9 18.5 L13 27 L17 25.2 L13 17 L21 17 Z" fill="#fff" stroke="#0a0f0d" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="layer" id="L-outro">
+    <div id="o-head"></div>
+    <div id="o-cols"></div>
+  </div>
+  <div id="fade"></div>
+</div>
+<script src="data.js"></script>
+<script src="scenes.js"></script>
+<script src="engine.js"></script>
+</body>
+</html>

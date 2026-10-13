@@ -1,0 +1,22 @@
+// Example capture step (Prayer.Tools with-orgs build): drive the real UI, capture before/after states with target boxes.
+import { open, shot } from './capture-lib.mjs'
+const base = 'http://localhost:2380'
+const login = ctx => ctx.request.post(`${base}/api/auth/login`, { data: { email: process.env.DEMO_EMAIL, password: process.env.DEMO_PASSWORD } })
+const { browser, page } = await open({ login })
+await page.goto(`${base}/@pray-for-istanbul/site/setup`, { waitUntil: 'networkidle' })
+await page.getByText('Ramadan', { exact: true }).first().click()
+await page.locator('input[type=date]').first().fill('2027-02-08')
+await page.locator('input[type=date]').nth(1).fill('2027-03-09').catch(() => {})
+const name = page.getByText('Campaign name').locator('xpath=ancestor::*[1]/following::input[1]')
+await name.fill('Ramadan 2027')
+const target = page.getByText('How many people are you hoping for?').locator('xpath=following::input[1]')
+await target.fill('500')
+await page.locator('body').click({ position: { x: 5, y: 500 } })
+await page.waitForTimeout(400)
+await shot(page, '07_setup_ramadan', { full: true, targets: { ram: page.getByText('Ramadan', { exact: true }).first(), start: page.locator('input[type=date]').first(), name, target, save: page.getByRole('button', { name: 'Save and continue' }) } })
+await page.getByRole('button', { name: 'Save and continue' }).click()
+await page.waitForTimeout(2000)
+await page.waitForLoadState('networkidle')
+await shot(page, '08_address', { full: true })
+console.log(await page.locator('main').innerText())
+await browser.close()

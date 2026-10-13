@@ -1,0 +1,90 @@
+[
+ {
+  "id": "s01_title",
+  "text": "Here's a quick tour of prayer campaigns in the with orgs plan option. Creating a campaign, managing its landing page and content, and looking after the people who pray."
+ },
+ {
+  "id": "s02_model",
+  "text": "Two ideas hold it together. A site is the long-lived home, with its own address, team, look, and people. A campaign is one run of that site, with dates, content, and a goal. There are no campaign types. A campaign is just four answers: its start, its end, its goal, and how often new content arrives."
+ },
+ {
+  "id": "s03_ch1",
+  "text": "First, creating a campaign."
+ },
+ {
+  "id": "s04_sites",
+  "text": "Everything starts from Your sites. New site opens a short onboarding that explains sites and campaigns before asking for anything."
+ },
+ {
+  "id": "s05_about",
+  "text": "Describe the site. The address is suggested from the name, and the location puts its prayers on the map."
+ },
+ {
+  "id": "s06_template",
+  "text": "Then pick a template. Ramadan fills in the answers: a shared start date, about thirty days, daily content, and the people-mobilized goal. Every answer stays editable."
+ },
+ {
+  "id": "s07_languages",
+  "text": "Choose the languages the site runs in. Here, English, Turkish, and Arabic."
+ },
+ {
+  "id": "s08_content",
+  "text": "Prayer content comes from a library. The template suggests one: use it as is, adapt it, or write your own."
+ },
+ {
+  "id": "s09_publish",
+  "text": "Add a top image and a reply-to address, and check the launch checklist. Then publish. The site is live."
+ },
+ {
+  "id": "s10_public",
+  "text": "And this is the public page, built from those answers: goal progress, signup, today's prayer, and sharing."
+ },
+ {
+  "id": "s11_ch2",
+  "text": "Next, managing the landing page and content."
+ },
+ {
+  "id": "s12_landing",
+  "text": "The landing page has fixed sections in a fixed order, and empty ones hide themselves. Add your own sections, and translate what you write with AI translate."
+ },
+ {
+  "id": "s13_live",
+  "text": "Save, and the new section is on the live site."
+ },
+ {
+  "id": "s14_content",
+  "text": "Prayer content is a numbered sequence of days. Step through days and languages, edit in a rich text editor, and placeholders like place fill in for each site."
+ },
+ {
+  "id": "s15_campaign",
+  "text": "Each campaign keeps its own setup, a thank you email for when it ends, and its results. Next year, relaunch on the same site."
+ },
+ {
+  "id": "s16_ch3",
+  "text": "Finally, managing subscribers."
+ },
+ {
+  "id": "s17_signup",
+  "text": "People sign up by choosing when to be reminded, in their own language and time zone. The boxes for updates are separate, and never pre-ticked."
+ },
+ {
+  "id": "s18_list",
+  "text": "Every signup lands in the site's CRM as an intercessor."
+ },
+ {
+  "id": "s19_contact",
+  "text": "Open one to see their prayer times and next reminder. Pause or add times, send a check-in, or delete their data on request."
+ },
+ {
+  "id": "s20_email",
+  "text": "Site email reaches only people who opted in on this site: the current campaign, past campaigns, or everyone who asked for updates. Prayer reminders are never affected."
+ },
+ {
+  "id": "s21_stats",
+  "text": "Stats track progress toward the goal, and owners can export intercessors at any time."
+ },
+ {
+  "id": "s22_outro",
+  "text": "Create, manage, and grow, all from one site. Take a look, and share your feedback on this plan option."
+ }
+]
