@@ -9,7 +9,7 @@ user-invocable: true
 Makes a short, polished, narrated demo video of a product using **real screens from the running app**. The style is dark background, one accent color, smooth easing and punchy on-screen text. Real screens make the video credible, and motion graphics make it watchable.
 
 Kit in this skill folder:
-- `template/`: the renderer (`index.html`, `engine.js`), a documented `scenes.js`, `capture-lib.mjs`, and `tts.py`, `stt.py`, `build-data.mjs`, `render.mjs`, `render-all.sh`, `mix.py`.
+- `template/`: the renderer (`index.html`, `engine.js`), a documented `scenes.js`, `capture-lib.mjs`, and `phonemes.py`, `tts.py`, `stt.py`, `build-data.mjs`, `render.mjs`, `render-all.sh`, `mix.py`.
 - `examples/`: a finished 3-minute video's scenes, narration and one capture step. Read these to learn the idioms.
 
 ## Phase 1: Research (no questions yet)
@@ -39,8 +39,14 @@ Work in the session scratchpad (e.g. `<scratchpad>/video/`) with `cp -r <skill-d
 - On-screen text: kicker (`01 · Create`), a 2–5 word headline ending in a period, and at most 3 short sub-points.
 
 ### 3.3 Voice
+- **Check pronunciation before the first `tts.py` run:** `uv run --python 3.12 --with kokoro --with soundfile python phonemes.py`. It lists, with the phonemes Kokoro picked:
+  - every word it has to guess (names, brands, foreign places)
+  - every heteronym, a word spelled one way but said two ways (record, live, lead, present, close, use…)
+- Pin each listed word whose sound doesn't fit the meaning, inline in `narration.json` with Kokoro's phoneme syntax: `[Record](/ɹəkˈɔɹd/)` for the verb (Kokoro reads "Record" at the start of a sentence or a label as the noun), `[records](/ɹəkˈɔɹdz/)`, or a name like `[Ourique](/oʊɹˈikə/)`.
+- Re-run until every listed word is either right or PINNED. The user shouldn't have to point out a mispronounced word.
+- Pinned words keep their display text in `words.json`, so `w('Record')` still resolves.
 - `uv run --python 3.12 --with kokoro --with soundfile python tts.py af_heart` generates `audio/<id>.wav`, `audio/timing.json` and `audio/words.json` (word timestamps). The first run downloads the model. Re-run with ids to regenerate single scenes: `python tts.py af_heart s02_model`.
-- **Always run `stt.py` on the clips** (`uv run --python 3.12 --with faster-whisper python stt.py audio/*.wav`) and read the transcript. Kokoro mispronounces hyphenated names ("with-orgs" → "Wythorg's"), and possessive "its" before a noun ("its address" → "it's a dress"). Rewrite the sentence, don't fight the phonemes, then regenerate and re-check.
+- **Always run `stt.py` on the clips** (`uv run --python 3.12 --with faster-whisper python stt.py audio/*.wav`) and read the transcript. Kokoro mispronounces hyphenated names ("with-orgs" → "Wythorg's"), and possessive "its" before a noun ("its address" → "it's a dress"). For those, rewrite the sentence and regenerate. Whisper can't hear wrong stress (REC-ord vs re-CORD), so that check only comes from `phonemes.py`.
 
 ### 3.4 Animate
 - Write `scenes.js` using the documented spec at the top of `template/scenes.js`. `w('word', offset, nth)` returns when a word is spoken, so clicks, highlights, page swaps, camera moves and sub-points all land on the narration. Scene length = lead-in + narration + tail, so visuals and voice stay in sync automatically.
